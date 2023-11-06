@@ -6,6 +6,7 @@ use App\Events\CommentWritten;
 use App\Events\LessonWatched;
 use App\Listeners\UnlockCommentAchievements;
 use App\Listeners\UnlockLessonAchievements;
+use App\Listeners\UserAchievementSubscriber;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -23,10 +24,10 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         LessonWatched::class => [
-            UnlockLessonAchievements::class
+            //
         ],
         CommentWritten::class => [
-            UnlockCommentAchievements::class
+            //
         ]
     ];
 
@@ -45,4 +46,14 @@ class EventServiceProvider extends ServiceProvider
     {
         return false;
     }
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        UserAchievementSubscriber::class,
+    ];
+
 }
