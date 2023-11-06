@@ -21,7 +21,7 @@ class UserAchievementService
 
         $toUnlock = $achievements
             ->filter(function ($achievement) use ($count) {
-                return $count >= $achievement->points;
+                return $count >= $achievement->required_count;
             })
             ->map->getKey();
             if (count($toUnlock) > 0) {
