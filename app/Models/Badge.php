@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Achievement extends Model
+class Badge extends Model
 {
     use HasFactory;
 
@@ -17,7 +17,6 @@ class Achievement extends Model
     protected $fillable = [
         'name',
         'description',
-        'type',
-        'required_count'
+        'achievement_count'
     ];
 }
