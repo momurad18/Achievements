@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\AchievementUnlocked;
 use App\Events\CommentWritten;
 use App\Events\LessonWatched;
+use App\Listeners\UnlockBadges;
 use App\Listeners\UnlockCommentAchievements;
 use App\Listeners\UnlockLessonAchievements;
 use App\Listeners\UserAchievementSubscriber;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         CommentWritten::class => [
             //
+        ],
+        AchievementUnlocked::class => [
+            UnlockBadges::class
         ]
     ];
 

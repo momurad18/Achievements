@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Achievement;
+use App\Models\Badge;
 use App\Models\User;
 
 class UserAchievementService
@@ -23,6 +24,23 @@ class UserAchievementService
                 return $count >= $achievement->points;
             })
             ->map->getKey();
-        $user->unlockAchievements($toUnlock);
+            if (count($toUnlock) > 0) {
+                $user->unlockAchievements($toUnlock);
+            }
+    }
+
+    public function unlockBadges (User $user) : void
+    {
+        $userBadges = $user->badges()->pluck('badge_id');
+        $badges = Badge::whereNotIn('id', $userBadges)->get();
+        $toUnlock = $badges
+            ->filter(function ($badge) use ($user) {
+                return $user->achievements()->count() >= $badge->achievement_count;
+            })
+            ->map->getKey();
+
+        if (count($toUnlock) > 0) {
+            $user->unlockBadges($toUnlock);
+        }
     }
 }
