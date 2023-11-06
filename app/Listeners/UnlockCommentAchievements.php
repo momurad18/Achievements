@@ -2,46 +2,34 @@
 
 namespace App\Listeners;
 
-use App\Events\AchievementUnlocked;
+
 use App\Events\CommentWritten;
-use App\Models\Achievement;
+use App\Services\UserAchievementService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
 class UnlockCommentAchievements
 {
+    private $achievementService;
     /**
      * Create the event listener.
+     *
+     * @param  \App\Services\UserAchievementService  $achievementService
      */
-    public function __construct()
+    public function __construct(UserAchievementService $achievementService)
     {
-        //
+        $this->achievementService = $achievementService;
     }
 
     /**
      * Handle the event.
+     *
+     * @param  \App\Events\CommentWritten  $event
+     * @return void
      */
     public function handle(CommentWritten $event): void
     {
-        $userAchievements = $event->comment->user
-            ->achievements()
-            ->where('type', 'comment')
-            ->pluck('achievement_id');
-        $achievements = Achievement::where('type', 'comment')
-            ->whereNotIn('id', $userAchievements)
-            ->get();
-        $toUnlock = $achievements
-            ->filter(function ($achievement) use ($event) {
-                return $event->comment->user->comments()->count() >=
-                    $achievement->required_count;
-            })
-            ->map->getKey();
-        if (count($toUnlock) > 0) {
-            foreach ($toUnlock as $id) {
-                $achievement = Achievement::findOrFail($id);
-                $event->comment->user->achievements()->attach($achievement->id);
-                AchievementUnlocked::dispatch($achievement->name, $event->comment->user);
-            }
-        }
+        $user = $event->comment->user;
+        $this->achievementService->unlockAchievements($user, 'comment', $user->comments()->count());
     }
 }
