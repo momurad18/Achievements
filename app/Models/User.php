@@ -79,5 +79,15 @@ class User extends Authenticatable
      {
         return $this->belongsToMany(Achievement::class);
      }
+
+      /**
+     * The achievements that a user has achieved.
+     * @return BelongsToMany
+     */
+
+     public function badges() : BelongsToMany
+     {
+        return $this->belongsToMany(Badge::class);
+     }
 }
 

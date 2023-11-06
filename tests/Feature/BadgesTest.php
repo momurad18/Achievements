@@ -20,7 +20,7 @@ class BadgesTest extends TestCase
             ->count(4)
             ->create();
         $ids = $achievements->pluck('id');
-        $badges = Badge::factory()->create(['achievement_count' => 4]);
+        $badge = Badge::factory()->create(['name' => 'Intermediate','achievement_count' => 4]);
         $user->unlockAchievements($ids);
         $this->assertCount(4, $user->achievements);
         $this->assertCount(1, $user->badges);
