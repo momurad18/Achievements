@@ -21,7 +21,7 @@ php artisan key:generate
 ```
 
 # Testing
-- Current testing enviroment uses sqlite connection and in memory database if you need to change it please update phpunit file.
+- Current testing environment uses sqlite connection and in memory database if you want to change it please update phpunit file.
 ```
 php artisan test
 ```
