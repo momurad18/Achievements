@@ -35,7 +35,45 @@ php artisan migrate
 php artisan db:seed
 ```
 
-   
+# Tests 
+  ## AchievementsEndpointTest
+  ✓ the application returns a successful response.\
+  ✓ the application returns correct keys and values when user has 0 achievement.\
+  ✓ the application returns correct keys and values when user has 5 achievements.\
+  ✓ the application returns correct keys and values when user unlocked all achievements.
+  
+  ## BadgesTest
+  ✓ a user has beginner badge.\
+  ✓ a user can earn intermediate badge.\
+  ✓ a user can earn advanced badge.\
+  ✓ a user can earn master badge.\
+  ✓ a badge unlocked dispatched.\
+  ✓ a badge unlocked dispatched n of times.
+  ## CommentAchievementsTest
+  ✓ a user can unlock first comment written.\
+  ✓ a user can unlock 3 comments written.\
+  ✓ a user can unlock 5 comments written.\
+  ✓ a user can unlock 10 comments written.\
+  ✓ a user can unlock 20 comments written.\
+  ✓ a comment achievement unlocked dispatched.\
+  ✓ a comment achievement unlocked dispatched n of times.
+  ## LessonAchievementsTest
+  ✓ a user can unlock first lesson achievement.\
+  ✓ a user can unlock 5 lessons achievement.\
+  ✓ a user can unlock 10 lessons achievement.\
+  ✓ a user can unlock 25 lessons achievement.\
+  ✓ a user can unlock 50 lessons achievement.\
+  ✓ a lesson achievement unlocked dispatched.\
+  ✓ a lesson achievement unlocked dispatched n of times.
+
+  # Tests results:
+  ## MySql
+  - Tests:    24 passed (46 assertions).
+  - Duration: 1.32s.
+
+  ## Sqlite
+  - Tests:    24 passed (46 assertions).
+  - Duration: 0.60s.
 
 ## License
 
