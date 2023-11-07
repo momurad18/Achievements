@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Events\LessonWatched;
 use App\Models\Achievement;
-use App\Models\Badge;
 use App\Models\Lesson;
 use App\Models\User;
 use Database\Seeders\AchievementSeeder;
@@ -33,11 +32,11 @@ class AchievementsEndpointTest extends TestCase
     }
 
     /**
-     * A basic feature test the application returns correct keys and values.
+     * A basic feature test the application returns correct keys and values when user has 0 achievement.
      *
      * @return void
      */
-    public function test_the_application_returns_correct_keys_and_values(): void
+    public function test_the_application_returns_correct_keys_and_values_when_user_has_0_achievement(): void
     {
         $this->seed([BadgeSeeder::class, AchievementSeeder::class]);
         $user = User::factory()->create();
@@ -96,6 +95,51 @@ class AchievementsEndpointTest extends TestCase
         $response = $this->actingAs($user)->getJson("/users/{$user->id}/achievements");
         $response->assertStatus(200);
 
+        $response->assertJsonStructure([
+            'unlocked_achievements',
+            'next_available_achievements',
+            'current_badge',
+            'next_badge',
+            'remaing_to_unlock_next_badge'
+        ]);
+        $response->assertJson($expectedResponse);
+
+    }
+
+    /**
+     * A basic feature test the application returns correct keys and values when user unlocked all achievements.
+     *
+     * @return void
+     */
+    public function test_the_application_returns_correct_keys_and_values_when_user_unlocked_all_achievements(): void
+    {
+        $this->seed([BadgeSeeder::class, AchievementSeeder::class]);
+        $user = User::factory()->create();
+        $achievements = Achievement::all()->sortBy([
+            ['required_count', 'asc'],
+            ['type', 'asc']
+        ])->pluck('id');
+        $user->unlockAchievements($achievements);
+        $expectedResponse = [
+            "unlocked_achievements" => [
+                "First Comment Written",
+                "First Lesson Watched",
+                "3 Comments Written",
+                "5 Comments Written",
+                "5 Lessons Watched",
+                "10 Comments Written",
+                "10 Lessons Watched",
+                "20 Comments Written",
+                "25 Lessons Watched",
+                "50 Lessons Watched"
+            ],
+            "next_available_achievements" => [],
+            "current_badge" => "Master",
+            "next_badge" => "",
+            "remaing_to_unlock_next_badge" => 0
+            ];
+        $response = $this->actingAs($user)->getJson("/users/{$user->id}/achievements");
+        $response->assertStatus(200);
         $response->assertJsonStructure([
             'unlocked_achievements',
             'next_available_achievements',

@@ -116,7 +116,7 @@ class BadgesTest extends TestCase
     }
 
     /**
-     * A basic feature test a badge unlocked dispatched.
+     * A basic feature test a badge unlocked dispatched n of times.
      *
      * @return void
      */

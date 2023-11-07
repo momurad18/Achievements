@@ -139,7 +139,7 @@ class LessonAchievementsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
+     * A basic feature test a lesson achievement unlocked dispatched.
      *
      * @return void
      */
@@ -160,7 +160,7 @@ class LessonAchievementsTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
+     * A basic feature test a lesson achievement unlocked dispatched n of times.
      *
      * @return void
      */

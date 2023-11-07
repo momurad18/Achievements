@@ -8,6 +8,12 @@ use App\Models\User;
 
 class UserAchievementService
 {
+    /**
+     * Unlocks achievement for a user based on their comments and lessons
+     *
+     * @param User $user, string $type, int $count
+     * @return void
+     */
     public function unlockAchievements (User $user, string $type, int $count) : void
     {
         $userAchievements = $user
@@ -24,11 +30,17 @@ class UserAchievementService
                 return $count >= $achievement->required_count;
             })
             ->map->getKey();
-            if (count($toUnlock) > 0) {
-                $user->unlockAchievements($toUnlock);
-            }
-    }
 
+        if (count($toUnlock) > 0) {
+            $user->unlockAchievements($toUnlock);
+        }
+    }
+    /**
+     * Unlocks badges for a user based on their achievements
+     *
+     * @param User $user
+     * @return void
+     */
     public function unlockBadges (User $user) : void
     {
         $userBadges = $user->badges()->pluck('badge_id');

@@ -9,7 +9,13 @@ use App\Models\Badge;
 
 trait HasAchievement
 {
-    public function unlockAchievements($ids)
+    /**
+     * Unlocked achievements for user for the model.
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function unlockAchievements($ids): void
     {
         foreach ($ids as $id) {
             $achievement = Achievement::findOrFail($id);
@@ -17,8 +23,13 @@ trait HasAchievement
             AchievementUnlocked::dispatch($achievement->name, $this);
         }
     }
-
-    public function unlockBadges($ids)
+    /**
+     * Unlocked badges for user for the model.
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function unlockBadges($ids): void
     {
         foreach ($ids as $id) {
             $badge = Badge::findOrFail($id);
@@ -27,6 +38,19 @@ trait HasAchievement
         }
     }
 
+
+    /**
+     * Get the next available achievements for the model.
+     *
+     * @return array
+     */
+    public function nextAvailableAchievements(): array
+    {
+        return array_values(array_filter([
+            $this->nextAchievementByType('lesson'),
+            $this->nextAchievementByType('comment'),
+        ]));
+    }
     /**
      * Get the model's current badge.
      *
@@ -57,27 +81,21 @@ trait HasAchievement
             ->orderBy('achievement_count', 'asc')
             ->first();
     }
-    /**
-     * Get the next available achievements for the model.
-     *
-     * @return array
-     */
-    public function nextAvailableAchievements(): array
-    {
-        return array_values(array_filter([
-            $this->nextAchievementByType('lesson'),
-            $this->nextAchievementByType('comment'),
-        ]));
-    }
 
     /**
-     * Get the remaing achievements to Unloack next badge.
+     * Get the remaining achievements to unlock the next badge.
      *
      * @return int
      */
-    public function remaingToUnloack(): int
+    public function remainingToUnlock(): int
     {
-        return ($this->getNextBadge()->achievement_count ?? 0) - $this->achievements->count();
+        $nextBadge = $this->getNextBadge();
+
+        if (is_null($nextBadge)) {
+            return 0;
+        }
+
+        return $nextBadge->achievement_count - $this->achievements->count();
     }
 
     /**
