@@ -26,7 +26,7 @@ php artisan key:generate
 php artisan test
 ```
 
-# Runing and Manual Testing
+# Run the project and Manual Testing
 
 ```
 php artisan migrate
